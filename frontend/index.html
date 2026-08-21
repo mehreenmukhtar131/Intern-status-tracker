@@ -1,12 +1,461 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Intern Status Tracker</title><link rel="stylesheet" href="style.css"></head>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Intern Status Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
 <body>
-<aside><div class="brand"><b>IT</b> Intern<span>Track</span></div><nav><a href="#dashboard">Dashboard</a><a href="#candidates">Candidates</a><a href="#statuses">Daily Statuses</a></nav><small>Intern Status Tracker<br>Daily progress, clearly managed.</small></aside>
-<main><header><div><em>UNIVERSITY PROJECT PORTAL</em><h1>Intern Status Tracker</h1></div><time id="todayLabel"></time></header><div id="alerts" aria-live="polite"></div>
-<section id="dashboard"><div class="heading"><div><em>OVERVIEW</em><h2>Daily dashboard</h2><p>Review reporting progress for a selected day.</p></div><form id="dashboardForm"><label>Report date <input id="dashboardDate" type="date" required></label><button>View dashboard</button></form></div>
-<div class="stats"><article>Active candidates<strong id="activeCount">—</strong></article><article>Submitted<strong id="submittedCount">—</strong></article><article>Missing<strong id="missingCount">—</strong></article><article>Average completion<strong id="averageCompletion">—</strong></article></div>
-<div class="columns"><article class="panel"><h3>Submitted candidates</h3><div id="submittedList" class="empty">Choose a date to view submissions.</div></article><article class="panel"><h3>Missing candidates</h3><div id="missingList" class="empty">Choose a date to view missing reports.</div></article></div></section>
-<section id="candidates"><div class="heading"><div><em>DIRECTORY</em><h2>Candidates</h2><p>Create, update, and manage candidate profiles.</p></div><button id="refreshCandidates" type="button">Refresh list</button></div><div class="content"><article class="panel"><h3 id="candidateTitle">Add candidate</h3><form id="candidateForm"><input id="candidateEditId" type="hidden"><label>Full name<input id="candidateName" minlength="2" maxlength="150" required></label><label>Email address<input id="candidateEmail" type="email" required></label><label>Training track<input id="candidateTrack" minlength="2" maxlength="100" required></label><label class="check"><input id="candidateActive" type="checkbox" checked> Candidate is active</label><div><button id="candidateSubmit">Create candidate</button><button id="cancelCandidate" class="secondary hidden" type="button">Cancel</button></div></form></article><article class="panel wide"><h3>All candidates <small id="candidateCount"></small></h3><div class="table"><table><thead><tr><th>ID</th><th>Full name</th><th>Email</th><th>Training track</th><th>Status</th><th>Actions</th></tr></thead><tbody id="candidateRows"></tbody></table></div></article></div></section>
-<section id="statuses"><div class="heading"><div><em>DAILY REPORTS</em><h2>Daily statuses</h2><p>Record and monitor each candidate’s progress.</p></div></div><div class="content"><article class="panel"><h3 id="statusTitle">Add daily status</h3><form id="statusForm"><input id="statusEditId" type="hidden"><label>Candidate<select id="statusCandidate" required><option value="">Select a candidate</option></select></label><label>Status date<input id="statusDate" type="date" required></label><label>Work completed<textarea id="workCompleted" required></textarea></label><label>Topics learned<textarea id="topicsLearned" required></textarea></label><label>Blockers<textarea id="blockers" required></textarea></label><label>Next-day plan<textarea id="nextPlan" required></textarea></label><label>Completion percentage<input id="completion" type="number" min="0" max="100" required></label><div><button id="statusSubmit">Save status</button><button id="cancelStatus" class="secondary hidden" type="button">Cancel</button></div></form></article><article class="panel wide"><div class="filter-heading"><h3>Existing statuses</h3><button id="clearFilters" class="secondary" type="button">Clear filters</button></div><form id="filters" class="filters"><select id="filterCandidate"><option value="">All candidates</option></select><input id="filterDate" type="date"><button>Filter</button></form><div class="table"><table class="status-table"><thead><tr><th>Date</th><th>Candidate</th><th>Work</th><th>Topics</th><th>Blockers</th><th>Next day</th><th>Complete</th><th>Actions</th></tr></thead><tbody id="statusRows"></tbody></table></div></article></div></section>
-</main><script src="script.js"></script></body></html>
+
+<aside>
+    <div class="brand">
+        <b>IT</b> Intern<span>Track</span>
+    </div>
+
+    <nav>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#candidates">Candidates</a>
+        <a href="#statuses">Daily Statuses</a>
+    </nav>
+
+    <small>
+        Intern Status Tracker<br>
+        Daily progress, clearly managed.
+    </small>
+</aside>
+
+<main>
+
+    <header>
+        <div>
+            
+            <h1>Intern Status Tracker</h1>
+        </div>
+        <time id="todayLabel"></time>
+    </header>
+
+    <div id="alerts" aria-live="polite"></div>
+
+
+    <!-- ================= DASHBOARD ================= -->
+
+    <section id="dashboard">
+
+        <div class="heading">
+            <div>
+                <em>OVERVIEW</em>
+                <h2>Daily dashboard</h2>
+                <p>Review reporting progress for a selected day.</p>
+            </div>
+
+            <form id="dashboardForm">
+                <label>
+                    Report date
+                    <input id="dashboardDate" type="date" required>
+                </label>
+
+                <button type="submit">View dashboard</button>
+            </form>
+        </div>
+
+
+        <div class="stats">
+
+            <article>
+                Active candidates
+                <strong id="activeCount">—</strong>
+            </article>
+
+            <article>
+                Submitted
+                <strong id="submittedCount">—</strong>
+            </article>
+
+            <article>
+                Missing
+                <strong id="missingCount">—</strong>
+            </article>
+
+            <article>
+                Average completion
+                <strong id="averageCompletion">—</strong>
+            </article>
+
+        </div>
+
+
+        <div class="columns">
+
+            <article class="panel">
+                <h3>Submitted candidates</h3>
+
+                <div id="submittedList" class="empty">
+                    Choose a date to view submissions.
+                </div>
+            </article>
+
+
+            <article class="panel">
+                <h3>Missing candidates</h3>
+
+                <div id="missingList" class="empty">
+                    Choose a date to view missing reports.
+                </div>
+            </article>
+
+        </div>
+
+
+        <!-- Latest status from every active candidate -->
+
+        <article class="panel latest-panel">
+
+            <h3>Latest status from every candidate</h3>
+
+            <div id="latestStatusList" class="empty">
+                Loading latest statuses...
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- ================= CANDIDATES ================= -->
+
+    <section id="candidates">
+
+        <div class="heading">
+
+            <div>
+                <em>DIRECTORY</em>
+                <h2>Candidates</h2>
+                <p>Create, update, and manage candidate profiles.</p>
+            </div>
+
+            <button id="refreshCandidates" type="button">
+                Refresh list
+            </button>
+
+        </div>
+
+
+        <div class="content">
+
+            <!-- Candidate form -->
+
+            <article class="panel">
+
+                <h3 id="candidateTitle">
+                    Add candidate
+                </h3>
+
+                <form id="candidateForm">
+
+                    <input id="candidateEditId" type="hidden">
+
+                    <label>
+                        Full name
+                        <input
+                            id="candidateName"
+                            minlength="2"
+                            maxlength="150"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Email address
+                        <input
+                            id="candidateEmail"
+                            type="email"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Training track
+                        <input
+                            id="candidateTrack"
+                            minlength="2"
+                            maxlength="100"
+                            required
+                        >
+                    </label>
+
+                    <label class="check">
+                        <input
+                            id="candidateActive"
+                            type="checkbox"
+                            checked
+                        >
+                        Candidate is active
+                    </label>
+
+                    <div>
+                        <button id="candidateSubmit" type="submit">
+                            Create candidate
+                        </button>
+
+                        <button
+                            id="cancelCandidate"
+                            class="secondary hidden"
+                            type="button"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+
+                </form>
+
+            </article>
+
+
+            <!-- Candidate table -->
+
+            <article class="panel wide">
+
+                <h3>
+                    All candidates
+                    <small id="candidateCount"></small>
+                </h3>
+
+                <div class="table">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Full name</th>
+                                <th>Email</th>
+                                <th>Training track</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="candidateRows"></tbody>
+
+                    </table>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= DAILY STATUSES ================= -->
+
+    <section id="statuses">
+
+        <div class="heading">
+
+            <div>
+                <em>DAILY REPORTS</em>
+                <h2>Daily statuses</h2>
+                <p>Record and monitor each candidate's progress.</p>
+            </div>
+
+        </div>
+
+
+        <div class="content">
+
+            <!-- Status form -->
+
+            <article class="panel">
+
+                <h3 id="statusTitle">
+                    Add daily status
+                </h3>
+
+                <form id="statusForm">
+
+                    <input id="statusEditId" type="hidden">
+
+                    <label>
+                        Candidate
+                        <select id="statusCandidate" required>
+                            <option value="">
+                                Select a candidate
+                            </option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Status date
+                        <input
+                            id="statusDate"
+                            type="date"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Work completed
+                        <textarea
+                            id="workCompleted"
+                            required
+                        ></textarea>
+                    </label>
+
+                    <label>
+                        Topics learned
+                        <textarea
+                            id="topicsLearned"
+                            required
+                        ></textarea>
+                    </label>
+
+                    <label>
+                        Blockers
+                        <textarea
+                            id="blockers"
+                            required
+                        ></textarea>
+                    </label>
+
+                    <label>
+                        Next-day plan
+                        <textarea
+                            id="nextPlan"
+                            required
+                        ></textarea>
+                    </label>
+
+                    <label>
+                        Completion percentage
+                        <input
+                            id="completion"
+                            type="number"
+                            min="0"
+                            max="100"
+                            required
+                        >
+                    </label>
+
+                    <div>
+
+                        <button
+                            id="statusSubmit"
+                            type="submit"
+                        >
+                            Save status
+                        </button>
+
+                        <button
+                            id="cancelStatus"
+                            class="secondary hidden"
+                            type="button"
+                        >
+                            Cancel
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </article>
+
+
+            <!-- Status history -->
+
+            <article class="panel wide">
+
+                <div class="filter-heading">
+
+                    <h3>
+                        Existing statuses
+                    </h3>
+
+                    <button
+                        id="clearFilters"
+                        class="secondary"
+                        type="button"
+                    >
+                        Clear filters
+                    </button>
+
+                </div>
+
+
+                <!-- Status filters -->
+
+                <form id="filters" class="filters">
+
+                    <label>
+                        Candidate
+                        <select id="filterCandidate">
+                            <option value="">
+                                All candidates
+                            </option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Date from
+                        <input
+                            id="filterDateFrom"
+                            type="date"
+                        >
+                    </label>
+
+                    <label>
+                        Date to
+                        <input
+                            id="filterDateTo"
+                            type="date"
+                        >
+                    </label>
+
+                    <button type="submit">
+                        Filter
+                    </button>
+
+                </form>
+
+
+                <div class="table">
+
+                    <table class="status-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Date</th>
+                                <th>Candidate</th>
+                                <th>Work</th>
+                                <th>Topics</th>
+                                <th>Blockers</th>
+                                <th>Next day</th>
+                                <th>Complete</th>
+                                <th>Actions</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="statusRows"></tbody>
+
+                    </table>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
