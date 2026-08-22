@@ -1,4 +1,4 @@
-Intern Status Tracker
+**Intern Status Tracker**
 
  1. Project Overview
 
@@ -27,9 +27,12 @@ The application consists of a FastAPI backend, PostgreSQL database, and a plain 
  2. Architecture
 
 The application follows a three-tier architecture:
- 
 
-Frontend
+
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/a857c80e-ccb5-4676-a295-1d5644f5f154" />
+
+
+**Frontend**
 The frontend is built using plain HTML, CSS, and JavaScript.
 It provides:
 •	Dashboard
@@ -42,7 +45,8 @@ It provides:
 •	Form validation
 •	Delete confirmations
 The frontend communicates with the FastAPI backend using the JavaScript fetch() API.
-Backend
+
+**Backend**
 The backend is implemented using FastAPI.
 It provides REST API endpoints for:
 •	Candidate CRUD operations
@@ -51,11 +55,13 @@ It provides REST API endpoints for:
 •	Candidate and date filtering
 •	Input validation
 •	Error handling
-Database
+
+**Database**
 PostgreSQL is used as the application database.
 SQLAlchemy is used to communicate with PostgreSQL and manage database models.
 A persistent PostgreSQL Docker volume is used so that data remains available after container restarts.
-3. Setup Instructions
+
+**3. Setup Instructions**
 Prerequisites
 The following software is required:
 •	Docker Desktop
@@ -63,15 +69,18 @@ The following software is required:
 A local PostgreSQL installation is not required because PostgreSQL runs inside Docker.
 Clone the Repository
 git clone https://github.com/mehreenmukhtar131/Intern-status-tracker.git
+
 Move into the project directory:
 cd Intern-status-tracker
-Environment Configuration
+
+**Environment Configuration**
 The project contains an .env.example file.
 Create the local .env file from the example.
 On Windows:
 copy .env.example .e 
 The .env file contains the PostgreSQL configuration.
-Example:
+
+**Example:**
 POSTGRES_DB=intern_tracker
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=your_password
@@ -80,88 +89,130 @@ POSTGRES_PORT=5432
 DATABASE_URL=postgresql://postgres:your_password@db:5432/intern_tracker
 
 The actual .env file should not be committed to Git.
-Start the Application
+
+**Start the Application**
+
 The complete application can be started with one Docker Compose command:
 docker compose up --build
 After the containers start successfully:
+
 Frontend:
+
 http://localhost:8080
 FastAPI backend:
 http://localhost:8000
 FastAPI interactive API documentation:
 http://localhost:8000/docs
-Stop the Application
+
+**Stop the Application**
 To stop the running containers:
 docker compose down
 The PostgreSQL data remains available because a persistent Docker volume is used.
-4. API Endpoint List
+
+**4. API Endpoint List**
 Candidate Endpoints
 Create Candidate
 POST /api/candidates
+
 Creates a new candidate.
+
 Get All Candidates
 GET /api/candidates
+
 Returns all candidates.
+
 Get Candidate
 GET /api/candidates/{id}
+
 Returns a specific candidate.
+
 Update Candidate
 PUT /api/candidates/{id}
+
 Updates candidate information.
+
 Delete Candidate
 DELETE /api/candidates/{id}
+
 Deletes a candidate.
 Daily Status Endpoints
 Create Daily Status
 POST /api/statuses
+
 Creates a daily status for a candidate.
+
 Get Statuses
 GET /api/statuses
+
 Returns daily statuses.
+
 The endpoint supports the following filters:
+
 candidate_id
 status_date
 date_from
 date_to
+
 Example:
+
 GET /api/statuses?candidate_id=3
+
 Example:
+
 GET /api/statuses?status_date=2026-08-21
+
 Example:
+
 GET /api/statuses?date_from=2026-08-20&date_to=2026-08-21
 Get Daily Status
 GET /api/statuses/{id}
+
 Returns a specific daily status.
+
 Update Daily Status
 PUT /api/statuses/{id}
+
 Updates an existing daily status.
+
 Delete Daily Status
 DELETE /api/statuses/{id}
+
 Deletes a daily status.
+
 Dashboard Endpoint
 GET /api/dashboard/summary?date=YYYY-MM-DD
+
 Returns dashboard information for the selected date.
+
 The response includes:
-•	Total active candidates
-•	Submitted count
-•	Missing count
-•	Average completion percentage
-•	Submitted candidates
-•	Missing candidates
-•	Latest status from every active candidate
-•	Candidates sorted by completion percentage
+
+Total active candidates
+Submitted count
+Missing count
+Average completion percentage
+Submitted candidates
+Missing candidates
+Latest status from every active candidate
+Candidates sorted by completion percentage
 Health Endpoint
 GET /health
+
 Returns the health status of the backend.
+
 Root Endpoint
 GET /
+
 Returns a message confirming that the Intern Status Tracker API is running.
-5. Database Design
+
+
+**5. Database Design**
+
 The application uses two main database tables:
 •	candidates
 •	daily_statuses
 Candidates Table
 candidates
+
 --------------------------------
 id
 full_name
@@ -170,16 +221,20 @@ training_track
 is_active
 created_at
 updated_at
-Fields
-Field	Description
-Id	Unique candidate identifier
-full_name	Candidate's full name
-Email	Candidate's email address
-training_track	Candidate's training track
-is_active	Indicates whether the candidate is active
-created_at	Candidate creation timestamp
-updated_at	Last update timestamp
-Daily Statuses Table
+
+**Fields**
+
+| Field            | Description                               |
+| ---------------- | ----------------------------------------- |
+| `id`             | Unique candidate identifier               |
+| `full_name`      | Candidate's full name                     |
+| `email`          | Candidate's email address                 |
+| `training_track` | Candidate's training track                |
+| `is_active`      | Indicates whether the candidate is active |
+| `created_at`     | Candidate creation timestamp              |
+| `updated_at`     | Last update timestamp                     |
+
+--------------------------------
 daily_statuses
 --------------------------------
 id
@@ -192,19 +247,24 @@ next_day_plan
 completion_percentage
 created_at
 updated_at
-Fields
-Field	Description
-Id	Unique status identifier
-candidate_id	Candidate associated with the status
-status_date	Date of the daily report
-work_completed	Work completed by the candidate
-topics_learned	Topics learned
-blockers	Problems or blockers
-next_day_plan	Plan for the next day
-completion_percentage	Completion percentage from 0 to 100
-created_at	Status creation timestamp
-updated_at	Last update timestamp
-Relationship
+
+**Fields**
+| Field                   | Description                          |
+| ----------------------- | ------------------------------------ |
+| `id`                    | Unique status identifier             |
+| `candidate_id`          | Candidate associated with the status |
+| `status_date`           | Date of the daily report             |
+| `work_completed`        | Work completed by the candidate      |
+| `topics_learned`        | Topics learned                       |
+| `blockers`              | Problems or blockers                 |
+| `next_day_plan`         | Plan for the next day                |
+| `completion_percentage` | Completion percentage from 0 to 100  |
+| `created_at`            | Status creation timestamp            |
+| `updated_at`            | Last update timestamp                |
+
+
+**Relationship**
+
 There is a foreign-key relationship between:
 daily_statuses.candidate_id
                 |
@@ -218,7 +278,9 @@ candidate_id + status_date
 Therefore:
 Candidate 1 + 2026-08-21
 can exist only once.
-6. Validation
+
+**6. Validation**
+
 The application uses Pydantic validation for API input.
 Validation includes:
 •	Required fields
@@ -231,7 +293,9 @@ Validation includes:
 For date-range filtering:
 date_from <= date_to
 must be satisfied.
-7. Error Handling
+
+**7. Error Handling**
+
 The application provides clear error responses using appropriate HTTP status codes.
 Candidate Not Found
 404 Not Found
@@ -254,7 +318,8 @@ The API returns:
 409 Conflict
 Invalid Input
 Invalid input is handled using FastAPI/Pydantic validation and returns an appropriate validation response.
-8. Dashboard
+
+**8. Dashboard**
 The dashboard provides an overview of candidate reporting progress for a selected date.
 It displays:
 •	Total active candidates
@@ -273,7 +338,8 @@ Submitted
 If the candidate does not have a status:
 Missing
 The dashboard also retrieves the latest available status from each active candidate.
-9. Docker Configuration
+
+**9. Docker Configuration**
 The project uses Docker Compose to run the complete application.
 The main services are:
 frontend
@@ -287,7 +353,9 @@ Database Service
 The database service uses PostgreSQL.
 A persistent volume is configured for PostgreSQL data.
 The application also uses a database health check to help ensure that the backend starts when the database is available.
-10. Environment Variables
+
+**10. Environment Variables**
+
 Database credentials are stored using environment variables.
 The project includes:
 .env.example
@@ -301,7 +369,9 @@ DATABASE_URL=postgresql://postgres:your_password@db:5432/intern_tracker
 
 The actual .env file is excluded from Git using .gitignore.
 Passwords and other local configuration values should not be committed to the repository.
-11. Testing
+
+**11. Testing**
+
 Automated backend tests are included using Pytest.
 Run the tests with Docker:
 docker compose exec backend pytest -q
@@ -315,7 +385,8 @@ The tests cover important application functionality, including:
 The current test suite contains:
 15 passed
 The tests were successfully executed inside the Docker backend container.
-12. Frontend
+
+**12. Frontend**
 The frontend uses plain:
 •	HTML
 •	CSS
@@ -338,7 +409,8 @@ The interface provides:
 •	Delete confirmation dialogs
 •	Responsive styling
 Candidate IDs remain available internally for API requests and database relationships but are not unnecessarily displayed to users.
-13. Project Structure
+
+**13. Project Structure**
 Intern-status-tracker/
 │
 ├── app/
@@ -366,11 +438,13 @@ Intern-status-tracker/
 ├── requirements.txt
 ├── .env.example
 └── .gitignore
-14. Data Persistence
+
+**14. Data Persistence**
 PostgreSQL uses a persistent Docker volume.
 This ensures that database records remain available after containers are stopped and started again.
 The project does not use SQLite as a replacement for PostgreSQL.
-15. Assumptions
+
+**15. Assumptions**
 The following assumptions are used in the application:
 •	Each candidate can submit only one daily status for a particular date.
 •	Only active candidates are considered when calculating dashboard active-candidate statistics.
@@ -381,7 +455,8 @@ The following assumptions are used in the application:
 •	Candidate IDs are internal identifiers used for database relationships and API operations.
 •	Candidate IDs are not unnecessarily displayed in the frontend.
 •	The actual .env file is kept locally and is not committed to Git.
-16. Verification
+
+**16. Verification**
 The application was verified using Docker Compose.
 The complete application successfully builds using:
 docker compose up --build
@@ -404,22 +479,37 @@ The following application functionality was tested:
 •	Missing candidate identification
 •	Completion percentage
 •	PostgreSQL data persistence
-17. Conclusion
+
+**17. Conclusion**
 Intern Status Tracker provides a complete full-stack solution for managing internship candidates and monitoring their daily progress.
 The project combines FastAPI, PostgreSQL, SQLAlchemy, Pydantic, Docker Compose, Nginx, HTML, CSS, JavaScript, and Pytest.
 The application supports candidate management, daily status tracking, dashboard reporting, filtering, validation, duplicate prevention, persistent database storage, and automated backend testing.
 
 After you paste and save it, run:
 
-cmd
+**cmd**
 git status
 Then you can commit it with:
 git add app/README.md
 git commit -m "Add project README documentation"
 git push origin main
-screenshots:
+
+**screenshots:**
 
  
+<img width="1115" height="536" alt="image" src="https://github.com/user-attachments/assets/092f7b03-6295-4572-b265-72624a31f659" />
+<img width="1100" height="535" alt="image" src="https://github.com/user-attachments/assets/88539f04-8754-4bf3-afb5-f217a81aa425" />
+<img width="1110" height="550" alt="image" src="https://github.com/user-attachments/assets/8a4fada6-a4c3-4869-a464-10c9be8535b9" />
+
+<img width="1021" height="554" alt="image" src="https://github.com/user-attachments/assets/87ce26f9-7f71-4ed6-ad92-404b4f615878" />
+
+<img width="1103" height="458" alt="image" src="https://github.com/user-attachments/assets/b68eb565-1fea-4328-92a6-f9fad58116ca" />
+
+
+
+
+
+
 
 
 
